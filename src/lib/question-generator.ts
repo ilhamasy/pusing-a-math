@@ -90,7 +90,7 @@ function generateCountingQuestion(id: string, difficulty: Difficulty): Question 
   return {
     id,
     type: "counting",
-    prompt: "Ada berapa objek di bawah ini? 🔍",
+    prompt: "Ada berapa banyak objek di bawah ini?",
     emoji,
     operandA: count,
     correctAnswer: count,
@@ -110,7 +110,7 @@ function generateAdditionQuestion(id: string, difficulty: Difficulty): Question 
   return {
     id,
     type: "addition",
-    prompt: "Berapa hasil penjumlahan ini? ➕",
+    prompt: "Berapa hasil penjumlahan ini?",
     operandA: a,
     operandB: b,
     operator: "+",
@@ -130,7 +130,7 @@ function generateSubtractionQuestion(id: string, difficulty: Difficulty): Questi
   return {
     id,
     type: "subtraction",
-    prompt: "Berapa sisa pengurangannya? ➖",
+    prompt: "Berapa sisa pengurangannya?",
     operandA: a,
     operandB: b,
     operator: "−",
@@ -156,7 +156,7 @@ function generateVisualMathQuestion(id: string, difficulty: Difficulty): Questio
     return {
       id,
       type: "visual_math",
-      prompt: "Hitung dan jumlahkan gambarnya! 🍓",
+      prompt: "Hitung dan jumlahkan gambarnya!",
       emoji,
       emojiGroups: [
         { emoji, count: a },
@@ -177,7 +177,7 @@ function generateVisualMathQuestion(id: string, difficulty: Difficulty): Questio
     return {
       id,
       type: "visual_math",
-      prompt: "Ambil gambar yang dicoret, berapakah sisanya? 🍬",
+      prompt: "Hitung hasil pengurangan gambarnya!",
       emoji,
       emojiGroups: [
         { emoji, count: a },
@@ -220,7 +220,7 @@ function generateComparisonLeastQuestion(id: string, difficulty: Difficulty): Qu
   return {
     id,
     type: "comparison_least",
-    prompt: "Dari gambar di bawah ini, manakah yang paling sedikit? 🔍",
+    prompt: "Dari gambar di bawah ini, manakah yang paling sedikit?",
     emoji,
     comparisonChoices,
     operandA: minCount,

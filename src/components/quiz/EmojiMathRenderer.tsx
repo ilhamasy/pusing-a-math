@@ -76,9 +76,7 @@ export function EmojiMathRenderer({ question }: EmojiMathRendererProps) {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.15 + i * 0.04 }}
-                className={`text-3xl md:text-4xl select-none ${
-                  isSubtraction ? "opacity-60 grayscale-[40%] line-through" : ""
-                }`}
+                className="text-3xl md:text-4xl select-none"
               >
                 {question.emoji || "🍓"}
               </motion.span>
@@ -89,7 +87,7 @@ export function EmojiMathRenderer({ question }: EmojiMathRendererProps) {
           <span className="text-3xl font-black text-[#40B9FF] px-1 select-none">= ?</span>
         </div>
         <p className="mt-2 text-xs md:text-sm text-white/70 font-semibold">
-          {isSubtraction ? "Take away the items, what is left?" : "Count both groups together!"}
+          {isSubtraction ? "Hitung hasil pengurangannya!" : "Hitung semua gambar bersama-sama!"}
         </p>
       </div>
     );
