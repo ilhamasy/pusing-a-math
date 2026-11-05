@@ -19,16 +19,16 @@ export const FUN_EMOJIS = [
 
 export const ENCOURAGEMENTS = {
   correct: [
-    "Amazing! You're so smart! 🌟",
-    "Super job, Space Explorer! 🚀",
-    "Hooray! You got it right! ⭐",
-    "Fantastic counting! 🎉",
-    "Brilliant math skills! ✨",
+    "Hebat banget! Jawabanmu benar! 🌟",
+    "Luar biasa, Penjelajah Antariksa! 🚀",
+    "Hore! Kamu pintar sekali! ⭐",
+    "Keren! Berhitungnya tepat! 🎉",
+    "Brilian! Jawabanmu 100% benar! ✨",
   ],
   incorrect: [
-    "Nice try! Let's keep exploring! 💫",
-    "Good effort! You're doing great! 🌟",
-    "Almost there! Let's try the next one! 🚀",
-    "Keep shining, little star! ⭐",
+    "Hampir tepat! Ayo coba lagi di soal berikutnya! 💫",
+    "Tetap semangat, kamu pasti bisa! 🌟",
+    "Jangan menyerah, ayo jelajahi lagi! 🚀",
+    "Terus bersinar, bintang kecil! ⭐",
   ],
 };
