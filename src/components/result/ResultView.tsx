@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { RotateCcw, CheckCircle2, Heart, Home, Share2, Sparkles, Award } from "lucide-react";
+import { RotateCcw, CheckCircle2, Heart, Home, Share2, Award } from "lucide-react";
 import { ScoreSummary } from "@/lib/scoring";
 import { QuizSettings } from "@/types/quiz";
 import { ScoreCountUp } from "./ScoreCountUp";
@@ -157,17 +157,6 @@ export function ResultView({ summary, settings, onPlayAgain, onGoHome }: ResultV
         transition={{ delay: 0.45 }}
         className="w-full mt-5 flex flex-col gap-2.5"
       >
-        {/* Share Report Primary Button */}
-        <button
-          onClick={handleOpenShare}
-          type="button"
-          id="btn-share-report"
-          className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#FFD166] via-[#FF78B9] to-[#8175FF] text-[#0B1028] font-black text-lg sm:text-xl shadow-xl shadow-[#FFD166]/25 border-2 border-white/40 cursor-pointer active:scale-95 transition-all flex items-center justify-center gap-2.5 group"
-        >
-          <Sparkles className="w-5 h-5 text-[#0B1028] group-hover:rotate-12 transition-transform" />
-          <span>Share Your Report 📸</span>
-        </button>
-
         {/* Play Again Button */}
         <button
           onClick={handlePlayAgain}
