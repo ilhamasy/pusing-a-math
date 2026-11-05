@@ -11,7 +11,8 @@ type QuizAction =
   | { type: "START_QUIZ" }
   | { type: "SELECT_ANSWER"; option: number }
   | { type: "NEXT_QUESTION" }
-  | { type: "PLAY_AGAIN" };
+  | { type: "PLAY_AGAIN" }
+  | { type: "GO_HOME" };
 
 const initialState: QuizState = {
   status: "landing",
@@ -106,6 +107,13 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
       };
     }
 
+    case "GO_HOME": {
+      return {
+        ...initialState,
+        status: "landing",
+      };
+    }
+
     default:
       return state;
   }
@@ -147,6 +155,11 @@ export function useQuiz() {
     dispatch({ type: "PLAY_AGAIN" });
   }, []);
 
+  const goHome = useCallback(() => {
+    sounds.playPop();
+    dispatch({ type: "GO_HOME" });
+  }, []);
+
   return {
     state,
     currentQuestion: state.questions[state.currentIndex] as Question | undefined,
@@ -154,5 +167,6 @@ export function useQuiz() {
     selectAnswer,
     nextQuestion,
     playAgain,
+    goHome,
   };
 }

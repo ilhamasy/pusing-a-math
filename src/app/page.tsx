@@ -22,6 +22,7 @@ export default function PusingAMathPage() {
     selectAnswer,
     nextQuestion,
     playAgain,
+    goHome,
   } = useQuiz();
 
   const [isShaking, setIsShaking] = useState(false);
@@ -48,7 +49,7 @@ export default function PusingAMathPage() {
       <FloatingPlanets />
 
       {/* Top Header Shell */}
-      <header className="relative z-20 w-full max-w-4xl mx-auto flex items-center justify-between py-2">
+      <header className="relative z-20 w-full max-w-4xl mx-auto flex items-center justify-between py-2 flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <span className="text-2xl select-none">🚀</span>
           <span className="font-black text-xl tracking-tight bg-gradient-to-r from-white via-[#FFD166] to-[#40B9FF] bg-clip-text text-transparent">
@@ -56,10 +57,15 @@ export default function PusingAMathPage() {
           </span>
         </div>
 
-        {/* Global Sound Toggle in header when on landing or result */}
-        {(state.status === "landing" || state.status === "result") && (
-          <AudioControl />
-        )}
+        {/* Top right title / subtitle & Audio Control */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <span className="text-xs sm:text-sm font-bold text-[#FFD166] bg-white/10 px-3 py-1.5 rounded-full border border-white/15 backdrop-blur-md shadow-sm">
+            Fun Quiz For Kindergarten Kids
+          </span>
+          {(state.status === "landing" || state.status === "result") && (
+            <AudioControl />
+          )}
+        </div>
       </header>
 
       {/* Main Interactive Stage */}
@@ -130,6 +136,7 @@ export default function PusingAMathPage() {
               <ResultView
                 summary={scoreSummary}
                 onPlayAgain={playAgain}
+                onGoHome={goHome}
               />
             </motion.div>
           )}
@@ -138,7 +145,7 @@ export default function PusingAMathPage() {
 
       {/* Footer Branding */}
       <footer className="relative z-10 py-3 text-center text-xs text-white/50 font-medium select-none">
-        Pusing A Math • Fun Learning Odyssey for Kindergarten Kids 🌟
+        Pusing A Math by Ilham Asyari@2026
       </footer>
     </main>
   );

@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Trophy, RotateCcw, CheckCircle2, Sparkles, Heart } from "lucide-react";
+import { Trophy, RotateCcw, CheckCircle2, Sparkles, Heart, Home } from "lucide-react";
 import { ScoreSummary } from "@/lib/scoring";
 import { ScoreCountUp } from "./ScoreCountUp";
 import { triggerGrandCelebration } from "@/components/shared/Confetti";
@@ -11,9 +11,10 @@ import { sounds } from "@/lib/sound";
 interface ResultViewProps {
   summary: ScoreSummary;
   onPlayAgain: () => void;
+  onGoHome: () => void;
 }
 
-export function ResultView({ summary, onPlayAgain }: ResultViewProps) {
+export function ResultView({ summary, onPlayAgain, onGoHome }: ResultViewProps) {
   useEffect(() => {
     sounds.playFanfare();
     triggerGrandCelebration();
@@ -22,6 +23,11 @@ export function ResultView({ summary, onPlayAgain }: ResultViewProps) {
   const handlePlayAgain = () => {
     sounds.playPop();
     onPlayAgain();
+  };
+
+  const handleGoHome = () => {
+    sounds.playPop();
+    onGoHome();
   };
 
   return (
@@ -99,12 +105,12 @@ export function ResultView({ summary, onPlayAgain }: ResultViewProps) {
         </div>
       </motion.div>
 
-      {/* Bouncing Play Again Action Button */}
+      {/* Actions: Play Again & Back to Home */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.45 }}
-        className="w-full mt-6"
+        className="w-full mt-6 flex flex-col gap-3"
       >
         <button
           onClick={handlePlayAgain}
@@ -115,7 +121,18 @@ export function ResultView({ summary, onPlayAgain }: ResultViewProps) {
           <RotateCcw className="w-6 h-6 stroke-[3]" />
           <span>Play Again 🔄</span>
         </button>
-        <p className="text-xs text-white/60 mt-2 font-medium">
+
+        <button
+          onClick={handleGoHome}
+          type="button"
+          id="btn-go-home"
+          className="w-full py-3.5 px-6 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-extrabold text-lg border border-white/20 backdrop-blur-md cursor-pointer active:scale-95 transition-all flex items-center justify-center gap-2.5 shadow-md"
+        >
+          <Home className="w-5 h-5 text-[#40B9FF]" />
+          <span>Back to Home 🏠</span>
+        </button>
+
+        <p className="text-xs text-white/60 mt-1 font-medium">
           Ready for another 10 questions? Let&apos;s go!
         </p>
       </motion.div>
