@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Compass, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { QuestionCount, Difficulty, QuizSettings } from "@/types/quiz";
 import { sounds } from "@/lib/sound";
 
@@ -83,18 +83,6 @@ export function LandingHero({ initialSettings, onStart }: LandingHeroProps) {
 
   return (
     <div className="relative z-10 flex flex-col items-center justify-center text-center px-4 py-4 max-w-lg mx-auto w-full">
-      {/* Space Explorer Badge */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-[#FFD166] font-bold text-xs sm:text-sm mb-4 shadow-md"
-      >
-        <Sparkles className="w-4 h-4 text-[#FFD166] animate-spin" style={{ animationDuration: "8s" }} />
-        <span>Space Math Odyssey for Kindergarten</span>
-        <Compass className="w-4 h-4 text-[#40B9FF]" />
-      </motion.div>
-
       {/* Floating Astronaut Character */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
