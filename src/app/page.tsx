@@ -136,6 +136,7 @@ export default function PusingAMathPage() {
             >
               <ResultView
                 summary={scoreSummary}
+                settings={state.settings}
                 onPlayAgain={playAgain}
                 onGoHome={goHome}
               />
