@@ -244,9 +244,6 @@ export function LandingHero({ initialSettings, onStart }: LandingHeroProps) {
         >
           Mulai Petualangan 🚀
         </button>
-        <p className="text-xs text-white/60 mt-2 font-medium">
-          {selectedCount} Soal • Mode {DIFFICULTIES.find((d) => d.key === selectedDifficulty)?.label} • Ada Soal &quot;Paling Sedikit&quot; 🔍
-        </p>
       </motion.div>
     </div>
   );
