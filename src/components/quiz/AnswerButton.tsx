@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { ComparisonChoice } from "@/types/quiz";
 
 interface AnswerButtonProps {
   value: number;
@@ -11,6 +12,7 @@ interface AnswerButtonProps {
   showAsCorrect: boolean; // true if this was the correct answer when an incorrect one was picked
   disabled: boolean;
   onClick: (value: number) => void;
+  comparisonChoice?: ComparisonChoice;
 }
 
 const BUTTON_THEMES = [
@@ -48,6 +50,7 @@ export function AnswerButton({
   showAsCorrect,
   disabled,
   onClick,
+  comparisonChoice,
 }: AnswerButtonProps) {
   const theme = BUTTON_THEMES[index % BUTTON_THEMES.length];
 
@@ -69,10 +72,37 @@ export function AnswerButton({
       disabled={disabled}
       onClick={() => onClick(value)}
       id={`btn-answer-${index}-${value}`}
-      aria-label={`Select answer ${value}`}
-      className={`w-full min-h-[72px] md:min-h-[80px] rounded-2xl flex items-center justify-center font-black text-4xl md:text-5xl shadow-md cursor-pointer transition-all disabled:cursor-not-allowed ${feedbackStyle}`}
+      aria-label={comparisonChoice ? `Pilih ${comparisonChoice.label}` : `Pilih jawaban ${value}`}
+      className={`w-full min-h-[76px] md:min-h-[86px] rounded-2xl flex items-center justify-center font-black shadow-md cursor-pointer transition-all disabled:cursor-not-allowed ${feedbackStyle}`}
     >
-      {value}
+      {comparisonChoice ? (
+        <div className="flex flex-col items-center justify-center p-2 w-full">
+          <div className="flex items-center justify-between w-full px-2 mb-1">
+            <span className="text-xs md:text-sm font-extrabold uppercase px-2 py-0.5 rounded-full bg-black/25 text-white">
+              {comparisonChoice.label}
+            </span>
+            <span className="text-xs font-black opacity-80">
+              {comparisonChoice.count} {comparisonChoice.emoji}
+            </span>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-1 max-h-14 overflow-hidden">
+            {comparisonChoice.count <= 6 ? (
+              Array.from({ length: comparisonChoice.count }).map((_, i) => (
+                <span key={i} className="text-xl md:text-2xl select-none leading-none">
+                  {comparisonChoice.emoji}
+                </span>
+              ))
+            ) : (
+              <div className="flex items-center gap-1.5 py-1">
+                <span className="text-2xl md:text-3xl select-none">{comparisonChoice.emoji}</span>
+                <span className="text-xl md:text-2xl font-black">× {comparisonChoice.count}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <span className="text-4xl md:text-5xl">{value}</span>
+      )}
     </motion.button>
   );
 }

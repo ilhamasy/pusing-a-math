@@ -1,5 +1,5 @@
 import { FUN_EMOJIS } from "@/constants/emojis";
-import { Question, QuestionType } from "@/types/quiz";
+import { Question, QuestionType, Difficulty, QuestionCount, ComparisonChoice } from "@/types/quiz";
 
 // Helper: Pick random item from array
 function pickRandom<T>(array: T[]): T {
@@ -21,12 +21,36 @@ function shuffle<T>(array: T[]): T[] {
   return result;
 }
 
+// Get numeric ceiling based on difficulty setting
+function getDifficultyLimit(difficulty: Difficulty): number {
+  switch (difficulty) {
+    case "easy":
+      return 10;
+    case "medium":
+      return 20;
+    case "hard":
+      return 30;
+    case "wni":
+      return 100;
+  }
+}
+
 // Generate 4 unique answer options including the correct one
 function generateOptions(correctAnswer: number, maxRange: number = 10): number[] {
   const optionsSet = new Set<number>([correctAnswer]);
 
-  // Candidate offsets to produce sensible distractors (e.g. ±1, ±2, ±3)
-  const candidateDeltas = shuffle([-2, -1, 1, 2, 3, -3, 4, -4]);
+  // Reasonable spread of distractors
+  const spread = Math.max(2, Math.floor(maxRange / 10));
+  const candidateDeltas = shuffle([
+    -spread,
+    spread,
+    -(spread * 2),
+    spread * 2,
+    -1,
+    1,
+    -(spread + 1),
+    spread + 1,
+  ]);
 
   for (const delta of candidateDeltas) {
     if (optionsSet.size >= 4) break;
@@ -36,26 +60,37 @@ function generateOptions(correctAnswer: number, maxRange: number = 10): number[]
     }
   }
 
-  // Fallback if needed to guarantee 4 unique options
+  // Fallback generation if needed
   let fallback = 0;
-  while (optionsSet.size < 4 && fallback <= 10) {
+  while (optionsSet.size < 4 && fallback <= maxRange) {
     optionsSet.add(fallback);
     fallback++;
+  }
+
+  // If still need more (e.g. small maxRange)
+  let extra = 1;
+  while (optionsSet.size < 4) {
+    optionsSet.add(correctAnswer + extra);
+    extra++;
   }
 
   return shuffle(Array.from(optionsSet).slice(0, 4));
 }
 
-// 1. Counting Objects generator (count 1 to 10)
-function generateCountingQuestion(id: string): Question {
-  const count = randomInt(1, 10);
+// 1. Counting Objects Generator
+function generateCountingQuestion(id: string, difficulty: Difficulty): Question {
+  const maxLimit = getDifficultyLimit(difficulty);
+  // Keep visual count manageable for counting
+  const upperCount = Math.min(maxLimit, difficulty === "easy" ? 10 : difficulty === "medium" ? 16 : 24);
+  const lowerCount = difficulty === "easy" ? 1 : difficulty === "medium" ? 3 : 5;
+  const count = randomInt(lowerCount, upperCount);
   const emoji = pickRandom(FUN_EMOJIS);
-  const options = generateOptions(count);
+  const options = generateOptions(count, maxLimit);
 
   return {
     id,
     type: "counting",
-    prompt: "How many are there?",
+    prompt: "Ada berapa objek di bawah ini? 🔍",
     emoji,
     operandA: count,
     correctAnswer: count,
@@ -63,17 +98,19 @@ function generateCountingQuestion(id: string): Question {
   };
 }
 
-// 2. Addition generator (operandA + operandB <= 10)
-function generateAdditionQuestion(id: string): Question {
-  const a = randomInt(1, 8);
-  const b = randomInt(1, 10 - a);
+// 2. Addition Generator (operandA + operandB <= limit)
+function generateAdditionQuestion(id: string, difficulty: Difficulty): Question {
+  const limit = getDifficultyLimit(difficulty);
+  const minOperand = difficulty === "wni" ? 10 : 1;
+  const a = randomInt(minOperand, limit - (difficulty === "wni" ? 10 : 2));
+  const b = randomInt(1, limit - a);
   const sum = a + b;
-  const options = generateOptions(sum);
+  const options = generateOptions(sum, limit);
 
   return {
     id,
     type: "addition",
-    prompt: "What is the sum?",
+    prompt: "Berapa hasil penjumlahan ini? ➕",
     operandA: a,
     operandB: b,
     operator: "+",
@@ -82,17 +119,18 @@ function generateAdditionQuestion(id: string): Question {
   };
 }
 
-// 3. Subtraction generator (operandA - operandB >= 0, operands 1-10)
-function generateSubtractionQuestion(id: string): Question {
-  const a = randomInt(2, 10);
-  const b = randomInt(1, a); // guarantees a - b >= 0
+// 3. Subtraction Generator (operandA - operandB >= 0, operandA <= limit)
+function generateSubtractionQuestion(id: string, difficulty: Difficulty): Question {
+  const limit = getDifficultyLimit(difficulty);
+  const a = randomInt(difficulty === "wni" ? 15 : 2, limit);
+  const b = randomInt(1, a);
   const diff = a - b;
-  const options = generateOptions(diff);
+  const options = generateOptions(diff, limit);
 
   return {
     id,
     type: "subtraction",
-    prompt: "What is left?",
+    prompt: "Berapa sisa pengurangannya? ➖",
     operandA: a,
     operandB: b,
     operator: "−",
@@ -101,21 +139,24 @@ function generateSubtractionQuestion(id: string): Question {
   };
 }
 
-// 4. Visual Math generator (groups of emojis with + or -)
-function generateVisualMathQuestion(id: string): Question {
+// 4. Visual Math Generator (groups of emojis with + or -)
+function generateVisualMathQuestion(id: string, difficulty: Difficulty): Question {
   const isAddition = Math.random() > 0.5;
   const emoji = pickRandom(FUN_EMOJIS);
+  const limit = getDifficultyLimit(difficulty);
+
+  const maxVisualPerGroup = difficulty === "easy" ? 5 : difficulty === "medium" ? 8 : 12;
 
   if (isAddition) {
-    const a = randomInt(1, 5);
-    const b = randomInt(1, Math.min(5, 10 - a));
+    const a = randomInt(1, maxVisualPerGroup);
+    const b = randomInt(1, Math.min(maxVisualPerGroup, limit - a));
     const sum = a + b;
-    const options = generateOptions(sum);
+    const options = generateOptions(sum, limit);
 
     return {
       id,
       type: "visual_math",
-      prompt: "Count and add them together!",
+      prompt: "Hitung dan jumlahkan gambarnya! 🍓",
       emoji,
       emojiGroups: [
         { emoji, count: a },
@@ -128,15 +169,15 @@ function generateVisualMathQuestion(id: string): Question {
       options,
     };
   } else {
-    const a = randomInt(2, 8);
-    const b = randomInt(1, Math.min(a - 1, 4));
+    const a = randomInt(2, maxVisualPerGroup);
+    const b = randomInt(1, a - 1);
     const diff = a - b;
-    const options = generateOptions(diff);
+    const options = generateOptions(diff, limit);
 
     return {
       id,
       type: "visual_math",
-      prompt: "Take away the items, how many remain?",
+      prompt: "Ambil gambar yang dicoret, berapakah sisanya? 🍬",
       emoji,
       emojiGroups: [
         { emoji, count: a },
@@ -151,30 +192,85 @@ function generateVisualMathQuestion(id: string): Question {
   }
 }
 
-// Master session generator: Exactly 10 questions (3 Counting, 2 Addition, 2 Subtraction, 3 Visual Math)
-export function generateQuizSession(): Question[] {
+// 5. Comparison: "Dari gambar dibawah ini manakah yang paling sedikit?"
+function generateComparisonLeastQuestion(id: string, difficulty: Difficulty): Question {
+  const emoji = pickRandom(FUN_EMOJIS);
+  const labels = ["A", "B", "C", "D"];
+
+  // Generate 4 unique counts
+  const countsSet = new Set<number>();
+  const upperLimit = difficulty === "easy" ? 8 : difficulty === "medium" ? 14 : 20;
+  const lowerLimit = 1;
+
+  while (countsSet.size < 4) {
+    countsSet.add(randomInt(lowerLimit, upperLimit));
+  }
+
+  const counts = shuffle(Array.from(countsSet));
+  const minCount = Math.min(...counts);
+  const correctIndex = counts.indexOf(minCount);
+
+  const comparisonChoices: ComparisonChoice[] = counts.map((count, idx) => ({
+    id: idx,
+    label: labels[idx],
+    emoji,
+    count,
+  }));
+
+  return {
+    id,
+    type: "comparison_least",
+    prompt: "Dari gambar di bawah ini, manakah yang paling sedikit? 🔍",
+    emoji,
+    comparisonChoices,
+    operandA: minCount,
+    correctAnswer: correctIndex, // 0, 1, 2, or 3 representing Option A, B, C, or D
+    options: [0, 1, 2, 3],
+  };
+}
+
+// Master session generator with configurable question count & difficulty
+export function generateQuizSession(
+  count: QuestionCount = 10,
+  difficulty: Difficulty = "easy"
+): Question[] {
   const questions: Question[] = [];
 
-  // 3 Counting
-  for (let i = 0; i < 3; i++) {
-    questions.push(generateCountingQuestion(`q-counting-${i}-${Date.now()}`));
+  // Guarantee at least 10% comparison_least questions
+  const comparisonCount = Math.max(1, Math.ceil(count * 0.1));
+  for (let i = 0; i < comparisonCount; i++) {
+    questions.push(generateComparisonLeastQuestion(`q-comp-${i}-${Date.now()}`, difficulty));
   }
 
-  // 2 Addition
-  for (let i = 0; i < 2; i++) {
-    questions.push(generateAdditionQuestion(`q-add-${i}-${Date.now()}`));
+  // Allocate remaining questions across Counting, Addition, Subtraction, Visual Math
+  const remaining = count - comparisonCount;
+  const additionCount = Math.max(1, Math.round(remaining * 0.28));
+  const subtractionCount = Math.max(1, Math.round(remaining * 0.28));
+  const visualCount = Math.max(1, Math.round(remaining * 0.24));
+  const countingCount = Math.max(1, remaining - additionCount - subtractionCount - visualCount);
+
+  for (let i = 0; i < countingCount; i++) {
+    questions.push(generateCountingQuestion(`q-counting-${i}-${Date.now()}`, difficulty));
   }
 
-  // 2 Subtraction
-  for (let i = 0; i < 2; i++) {
-    questions.push(generateSubtractionQuestion(`q-sub-${i}-${Date.now()}`));
+  for (let i = 0; i < additionCount; i++) {
+    questions.push(generateAdditionQuestion(`q-add-${i}-${Date.now()}`, difficulty));
   }
 
-  // 3 Visual Math
-  for (let i = 0; i < 3; i++) {
-    questions.push(generateVisualMathQuestion(`q-visual-${i}-${Date.now()}`));
+  for (let i = 0; i < subtractionCount; i++) {
+    questions.push(generateSubtractionQuestion(`q-sub-${i}-${Date.now()}`, difficulty));
   }
 
-  // Shuffle question sequence so order is varied every session
-  return shuffle(questions);
+  for (let i = 0; i < visualCount; i++) {
+    questions.push(generateVisualMathQuestion(`q-visual-${i}-${Date.now()}`, difficulty));
+  }
+
+  // Trim or adjust if rounding had slight difference
+  let finalQuestions = questions.slice(0, count);
+  while (finalQuestions.length < count) {
+    finalQuestions.push(generateAdditionQuestion(`q-fill-${finalQuestions.length}-${Date.now()}`, difficulty));
+  }
+
+  // Ensure randomized sequence
+  return shuffle(finalQuestions);
 }

@@ -31,6 +31,8 @@ export function AnswerGrid({
           !feedback.isCorrect &&
           optionValue === question.correctAnswer;
 
+        const comparisonChoice = question.comparisonChoices?.[idx];
+
         return (
           <AnswerButton
             key={`opt-${idx}-${optionValue}`}
@@ -41,6 +43,7 @@ export function AnswerGrid({
             showAsCorrect={showAsCorrect}
             disabled={isAnswered}
             onClick={onSelect}
+            comparisonChoice={comparisonChoice}
           />
         );
       })}

@@ -24,7 +24,7 @@ export function QuestionCard({ question, isShaking }: QuestionCardProps) {
     >
       {/* Category Tag */}
       <div className="inline-block px-3 py-1 rounded-full bg-[#8175FF]/30 border border-[#8175FF]/50 text-xs font-bold uppercase tracking-wider text-white/90 mb-2">
-        {question.type.replace("_", " ")}
+        {question.type === "comparison_least" ? "Paling Sedikit" : question.type.replace("_", " ")}
       </div>
 
       {/* Main Question Prompt */}

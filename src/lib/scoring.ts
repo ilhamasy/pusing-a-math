@@ -9,9 +9,9 @@ export interface ScoreSummary {
 }
 
 export function calculateScore(correctCount: number, totalQuestions: number = 10): ScoreSummary {
-  const pointsPerQuestion = 10;
-  const score = correctCount * pointsPerQuestion;
-  const incorrectCount = totalQuestions - correctCount;
+  const safeTotal = totalQuestions > 0 ? totalQuestions : 10;
+  const score = Math.round((correctCount / safeTotal) * 100);
+  const incorrectCount = safeTotal - correctCount;
 
   let badge = "🌟";
   let message = "Amazing! Math Superstar! 🌟";

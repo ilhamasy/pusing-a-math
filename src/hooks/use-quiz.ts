@@ -1,18 +1,24 @@
 "use client";
 
 import { useReducer, useCallback } from "react";
-import { QuizState, Question, AnswerFeedback } from "@/types/quiz";
+import { QuizState, Question, AnswerFeedback, QuizSettings } from "@/types/quiz";
 import { generateQuizSession } from "@/lib/question-generator";
 import { ENCOURAGEMENTS } from "@/constants/emojis";
 import { triggerCorrectConfetti } from "@/components/shared/Confetti";
 import { sounds } from "@/lib/sound";
 
 type QuizAction =
-  | { type: "START_QUIZ" }
+  | { type: "START_QUIZ"; settings?: QuizSettings }
+  | { type: "SET_SETTINGS"; settings: QuizSettings }
   | { type: "SELECT_ANSWER"; option: number }
   | { type: "NEXT_QUESTION" }
   | { type: "PLAY_AGAIN" }
   | { type: "GO_HOME" };
+
+const initialSettings: QuizSettings = {
+  questionCount: 10,
+  difficulty: "easy",
+};
 
 const initialState: QuizState = {
   status: "landing",
@@ -24,14 +30,27 @@ const initialState: QuizState = {
   lastFeedback: null,
   selectedOption: null,
   soundEnabled: true,
+  settings: initialSettings,
 };
 
 function quizReducer(state: QuizState, action: QuizAction): QuizState {
   switch (action.type) {
+    case "SET_SETTINGS": {
+      return {
+        ...state,
+        settings: action.settings,
+      };
+    }
+
     case "START_QUIZ": {
-      const newQuestions = generateQuizSession();
+      const activeSettings = action.settings || state.settings;
+      const newQuestions = generateQuizSession(
+        activeSettings.questionCount,
+        activeSettings.difficulty
+      );
       return {
         ...initialState,
+        settings: activeSettings,
         status: "in_quiz",
         questions: newQuestions,
         currentIndex: 0,
@@ -63,8 +82,10 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
         encouragement,
       };
 
-      const newScore = isCorrect ? state.score + 10 : state.score;
+      const totalQ = state.questions.length || 10;
+      const pointsPerQ = 100 / totalQ;
       const newCorrectCount = isCorrect ? state.correctCount + 1 : state.correctCount;
+      const newScore = Math.round(newCorrectCount * pointsPerQ);
       const newIncorrectCount = !isCorrect ? state.incorrectCount + 1 : state.incorrectCount;
 
       return {
@@ -99,9 +120,13 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
     }
 
     case "PLAY_AGAIN": {
-      const freshQuestions = generateQuizSession();
+      const freshQuestions = generateQuizSession(
+        state.settings.questionCount,
+        state.settings.difficulty
+      );
       return {
         ...initialState,
+        settings: state.settings,
         status: "in_quiz",
         questions: freshQuestions,
       };
@@ -110,6 +135,7 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
     case "GO_HOME": {
       return {
         ...initialState,
+        settings: state.settings,
         status: "landing",
       };
     }
@@ -122,8 +148,12 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
 export function useQuiz() {
   const [state, dispatch] = useReducer(quizReducer, initialState);
 
-  const startQuiz = useCallback(() => {
-    dispatch({ type: "START_QUIZ" });
+  const setSettings = useCallback((settings: QuizSettings) => {
+    dispatch({ type: "SET_SETTINGS", settings });
+  }, []);
+
+  const startQuiz = useCallback((settings?: QuizSettings) => {
+    dispatch({ type: "START_QUIZ", settings });
   }, []);
 
   const selectAnswer = useCallback(
@@ -163,6 +193,7 @@ export function useQuiz() {
   return {
     state,
     currentQuestion: state.questions[state.currentIndex] as Question | undefined,
+    setSettings,
     startQuiz,
     selectAnswer,
     nextQuestion,

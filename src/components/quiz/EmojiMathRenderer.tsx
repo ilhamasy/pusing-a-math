@@ -95,7 +95,18 @@ export function EmojiMathRenderer({ question }: EmojiMathRendererProps) {
     );
   }
 
-  // Case 3 & 4: Numerical Addition / Subtraction
+  // Case 3: Comparison Least ("Manakah yang paling sedikit?")
+  if (question.type === "comparison_least") {
+    return (
+      <div className="flex flex-col items-center justify-center my-2">
+        <p className="text-xs md:text-sm text-[#FFD166] font-bold">
+          Pilih kotak (A, B, C, atau D) yang isinya paling sedikit! 👇
+        </p>
+      </div>
+    );
+  }
+
+  // Case 4: Numerical Addition / Subtraction
   return (
     <div className="flex flex-col items-center justify-center my-4">
       <div className="p-4 rounded-2xl bg-white/5 border border-white/10 shadow-inner flex items-center justify-center gap-4">

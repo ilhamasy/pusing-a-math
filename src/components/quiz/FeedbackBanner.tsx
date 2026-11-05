@@ -9,14 +9,22 @@ interface FeedbackBannerProps {
   feedback: AnswerFeedback;
   onNext: () => void;
   isLastQuestion: boolean;
+  questionType?: string;
 }
 
 export function FeedbackBanner({
   feedback,
   onNext,
   isLastQuestion,
+  questionType,
 }: FeedbackBannerProps) {
   const { isCorrect, encouragement } = feedback;
+
+  const answerDetail = isCorrect
+    ? "+10 cosmic points!"
+    : questionType === "comparison_least"
+    ? `Pilihan yang paling sedikit adalah ${["A", "B", "C", "D"][feedback.correctAnswer]}`
+    : `Jawaban yang benar adalah ${feedback.correctAnswer}`;
 
   return (
     <motion.div
@@ -42,7 +50,7 @@ export function FeedbackBanner({
             {encouragement}
           </p>
           <p className="text-xs text-white/80 mt-0.5">
-            {isCorrect ? "+10 cosmic points!" : `The answer was ${feedback.correctAnswer}`}
+            {answerDetail}
           </p>
         </div>
       </div>

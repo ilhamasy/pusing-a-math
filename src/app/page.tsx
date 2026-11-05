@@ -81,7 +81,7 @@ export default function PusingAMathPage() {
               transition={{ duration: 0.3 }}
               className="w-full flex justify-center"
             >
-              <LandingHero onStart={startQuiz} />
+              <LandingHero initialSettings={state.settings} onStart={startQuiz} />
             </motion.div>
           )}
 
@@ -118,6 +118,7 @@ export default function PusingAMathPage() {
                   feedback={state.lastFeedback}
                   onNext={nextQuestion}
                   isLastQuestion={isLastQuestion}
+                  questionType={currentQuestion.type}
                 />
               )}
             </motion.div>
