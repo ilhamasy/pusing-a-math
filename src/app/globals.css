@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --space-bg: #0b1026;
+    --space-purple: #8175ff;
+    --space-blue: #40b9ff;
+    --space-yellow: #ffd166;
+    --space-pink: #ff78b9;
+    --space-green: #45d6a0;
+  }
+
+  body {
+    background-color: var(--space-bg);
+    color: #ffffff;
+    font-family: var(--font-nunito), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overflow-x: hidden;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Custom Cosmic Keyframe Animations */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(129, 117, 255, 0.4), 0 0 30px rgba(64, 185, 255, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(129, 117, 255, 0.8), 0 0 50px rgba(64, 185, 255, 0.4);
+    transform: scale(1.03);
+  }
+}
+
+@keyframes gentle-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-6px);
+  }
+  40%, 80% {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes bounce-item {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+.animate-gentle-shake {
+  animation: gentle-shake 0.4s ease-in-out;
+}
+
+.animate-bounce-item {
+  animation: bounce-item 2s ease-in-out infinite;
+}
+
+/* Reduced Motion Override for Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .animate-twinkle,
+  .animate-float,
+  .animate-pulse-glow,
+  .animate-gentle-shake,
+  .animate-bounce-item {
+    animation: none !important;
+  }
+}
