@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Share2, Download, Copy, Check, Loader2, Sparkles, AlertCircle } from "lucide-react";
+import { X, Share2, Download, Copy, Check, Loader2, AlertCircle } from "lucide-react";
 import { toPng, toBlob } from "html-to-image";
 import { ScoreSummary } from "@/lib/scoring";
 import { QuizSettings } from "@/types/quiz";
@@ -197,17 +197,10 @@ export function ShareReportModal({
             </button>
 
             {/* Modal Header */}
-            <div className="text-center mt-1 mb-4">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFD166]/20 border border-[#FFD166]/40 text-xs font-bold text-[#FFD166] mb-2">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Share Your Astronaut Report</span>
-              </div>
+            <div className="text-center mt-1 mb-3">
               <h3 className="text-xl sm:text-2xl font-black text-white">
                 Bagikan Pencapaianmu! 🚀
               </h3>
-              <p className="text-xs sm:text-sm text-white/70 mt-0.5">
-                Pamerkan Astronaut Rank dan skor kosmikmu ke teman & media sosial!
-              </p>
             </div>
 
             {/* Hidden Off-Screen Card Template for Image Capture */}
@@ -308,10 +301,6 @@ export function ShareReportModal({
                 </button>
               </div>
             </div>
-
-            <p className="text-[11px] text-white/50 text-center mt-3">
-              Cocok dibagikan ke WhatsApp Status, Instagram Stories, atau grup belajar! 🌟
-            </p>
           </motion.div>
         </div>
       )}

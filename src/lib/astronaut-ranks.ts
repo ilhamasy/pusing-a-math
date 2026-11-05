@@ -15,7 +15,7 @@ export const ASTRONAUT_RANKS: AstronautRank[] = [
   {
     rank: "Space Rookie",
     description: "Keep learning, SAYA AKAN LAWAN!",
-    badgeEmoji: "🌱",
+    badgeEmoji: "🔭",
     themeColor: "#FF78B9",
     borderGradient: "from-pink-500 via-rose-500 to-purple-500",
     bgGradient: "from-pink-500/20 to-rose-600/20",
@@ -35,7 +35,7 @@ export const ASTRONAUT_RANKS: AstronautRank[] = [
   {
     rank: "Junior Astronaut",
     description: "You're making great progress!",
-    badgeEmoji: "🚀",
+    badgeEmoji: "⭐",
     themeColor: "#8175FF",
     borderGradient: "from-indigo-400 via-purple-500 to-pink-500",
     bgGradient: "from-indigo-500/20 to-purple-600/20",
@@ -55,7 +55,7 @@ export const ASTRONAUT_RANKS: AstronautRank[] = [
   {
     rank: "Galaxy Commander",
     description: "Amazing! You're almost mastering the galaxy!",
-    badgeEmoji: "⭐",
+    badgeEmoji: "🌌",
     themeColor: "#FFD166",
     borderGradient: "from-amber-400 via-orange-500 to-yellow-300",
     bgGradient: "from-amber-500/20 to-orange-600/20",
@@ -65,7 +65,7 @@ export const ASTRONAUT_RANKS: AstronautRank[] = [
   {
     rank: "Real Astronaut",
     description: "Perfect mission! You've conquered the universe!",
-    badgeEmoji: "👨‍🚀",
+    badgeEmoji: "👨‍🚀🏆",
     themeColor: "#FFE27A",
     borderGradient: "from-yellow-300 via-[#FFD166] to-[#8175FF]",
     bgGradient: "from-yellow-400/25 via-amber-500/20 to-purple-600/25",
