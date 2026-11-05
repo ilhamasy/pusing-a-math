@@ -73,31 +73,35 @@ export function AnswerButton({
       onClick={() => onClick(value)}
       id={`btn-answer-${index}-${value}`}
       aria-label={comparisonChoice ? `Pilih ${comparisonChoice.label}` : `Pilih jawaban ${value}`}
-      className={`w-full min-h-[76px] md:min-h-[86px] rounded-2xl flex items-center justify-center font-black shadow-md cursor-pointer transition-all disabled:cursor-not-allowed ${feedbackStyle}`}
+      className={`w-full min-h-[84px] md:min-h-[96px] rounded-2xl flex items-center justify-center font-black shadow-md cursor-pointer transition-all disabled:cursor-not-allowed ${feedbackStyle}`}
     >
       {comparisonChoice ? (
-        <div className="flex flex-col items-center justify-center p-2 w-full">
+        <div className="flex flex-col items-center justify-center p-2 w-full h-full">
           <div className="flex items-center justify-between w-full px-2 mb-1">
-            <span className="text-xs md:text-sm font-extrabold uppercase px-2 py-0.5 rounded-full bg-black/25 text-white">
+            <span className="text-xs md:text-sm font-black uppercase px-2 py-0.5 rounded-full bg-black/25 text-white">
               {comparisonChoice.label}
             </span>
-            <span className="text-xs font-black opacity-80">
-              {comparisonChoice.count} {comparisonChoice.emoji}
-            </span>
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-1 max-h-14 overflow-hidden">
-            {comparisonChoice.count <= 6 ? (
-              Array.from({ length: comparisonChoice.count }).map((_, i) => (
-                <span key={i} className="text-xl md:text-2xl select-none leading-none">
-                  {comparisonChoice.emoji}
-                </span>
-              ))
-            ) : (
-              <div className="flex items-center gap-1.5 py-1">
-                <span className="text-2xl md:text-3xl select-none">{comparisonChoice.emoji}</span>
-                <span className="text-xl md:text-2xl font-black">× {comparisonChoice.count}</span>
-              </div>
+            {disabled && (
+              <span className="text-xs font-black opacity-90 animate-fade-in">
+                {comparisonChoice.count} {comparisonChoice.emoji}
+              </span>
             )}
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-1.5 w-full py-1">
+            {Array.from({ length: comparisonChoice.count }).map((_, i) => (
+              <span
+                key={i}
+                className={`select-none leading-none inline-block ${
+                  comparisonChoice.count <= 3
+                    ? "text-3xl md:text-4xl"
+                    : comparisonChoice.count <= 6
+                    ? "text-2xl md:text-3xl"
+                    : "text-xl md:text-2xl"
+                }`}
+              >
+                {comparisonChoice.emoji}
+              </span>
+            ))}
           </div>
         </div>
       ) : (

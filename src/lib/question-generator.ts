@@ -197,9 +197,9 @@ function generateComparisonLeastQuestion(id: string, difficulty: Difficulty): Qu
   const emoji = pickRandom(FUN_EMOJIS);
   const labels = ["A", "B", "C", "D"];
 
-  // Generate 4 unique counts
+  // Generate 4 unique counts between 1 and 7 (easy) or 8 (others) so each icon is rendered individually
   const countsSet = new Set<number>();
-  const upperLimit = difficulty === "easy" ? 8 : difficulty === "medium" ? 14 : 20;
+  const upperLimit = difficulty === "easy" ? 7 : 8;
   const lowerLimit = 1;
 
   while (countsSet.size < 4) {
