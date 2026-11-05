@@ -33,7 +33,7 @@ export function EmojiMathRenderer({ question }: EmojiMathRendererProps) {
           ))}
         </div>
         <p className="mt-2 text-sm text-white/70 font-semibold">
-          Count every {question.emoji || "item"}!
+          Hitung semua {question.emoji || "gambarnya"}!
         </p>
       </div>
     );
@@ -45,48 +45,80 @@ export function EmojiMathRenderer({ question }: EmojiMathRendererProps) {
     const groupB = Array.from({ length: question.operandB || 1 });
     const isSubtraction = question.operator === "−";
 
+    const maxCount = Math.max(groupA.length, groupB.length);
+    const emojiSizeClass =
+      maxCount <= 3
+        ? "text-3xl sm:text-4xl"
+        : maxCount <= 6
+        ? "text-2xl sm:text-3xl"
+        : "text-xl sm:text-2xl";
+
     return (
-      <div className="flex flex-col items-center justify-center my-4">
-        <div className="flex items-center justify-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10 shadow-inner flex-wrap">
-          {/* Group A */}
-          <div className="flex flex-wrap items-center justify-center gap-1.5 max-w-[120px]">
-            {groupA.map((_, i) => (
-              <motion.span
-                key={`a-${i}`}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: i * 0.04 }}
-                className="text-3xl md:text-4xl select-none"
-              >
-                {question.emoji || "🍓"}
-              </motion.span>
-            ))}
+      <div className="flex flex-col items-center justify-center my-3 w-full">
+        {/* Main Equation Container */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 p-2.5 sm:p-3.5 rounded-3xl bg-white/5 border border-white/10 shadow-inner max-w-full">
+          {/* Group A Capsule with Parentheses */}
+          <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-2xl bg-[#8175FF]/20 border-2 border-[#8175FF]/50 shadow-sm backdrop-blur-sm">
+            <span className="text-2xl sm:text-3xl font-black text-[#FFD166] select-none leading-none">
+              (
+            </span>
+            <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-1.5 max-w-[130px] sm:max-w-[160px]">
+              {groupA.map((_, i) => (
+                <motion.span
+                  key={`a-${i}`}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: i * 0.04 }}
+                  className={`${emojiSizeClass} select-none leading-tight inline-block`}
+                >
+                  {question.emoji || "🎈"}
+                </motion.span>
+              ))}
+            </div>
+            <span className="text-2xl sm:text-3xl font-black text-[#FFD166] select-none leading-none">
+              )
+            </span>
           </div>
 
-          {/* Bold Operator */}
-          <span className="text-3xl font-black text-[#FFD166] px-1 select-none">
-            {question.operator || "+"}
-          </span>
+          {/* Math Operator */}
+          <div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#FFD166]/20 border-2 border-[#FFD166]/50 shadow-sm shrink-0">
+            <span className="text-xl sm:text-2xl font-black text-[#FFD166] select-none leading-none">
+              {question.operator || "+"}
+            </span>
+          </div>
 
-          {/* Group B */}
-          <div className="flex flex-wrap items-center justify-center gap-1.5 max-w-[120px]">
-            {groupB.map((_, i) => (
-              <motion.span
-                key={`b-${i}`}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.15 + i * 0.04 }}
-                className="text-3xl md:text-4xl select-none"
-              >
-                {question.emoji || "🍓"}
-              </motion.span>
-            ))}
+          {/* Group B Capsule with Parentheses */}
+          <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-2xl bg-[#FF78B9]/20 border-2 border-[#FF78B9]/50 shadow-sm backdrop-blur-sm">
+            <span className="text-2xl sm:text-3xl font-black text-[#FF78B9] select-none leading-none">
+              (
+            </span>
+            <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-1.5 max-w-[130px] sm:max-w-[160px]">
+              {groupB.map((_, i) => (
+                <motion.span
+                  key={`b-${i}`}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.15 + i * 0.04 }}
+                  className={`${emojiSizeClass} select-none leading-tight inline-block`}
+                >
+                  {question.emoji || "🎈"}
+                </motion.span>
+              ))}
+            </div>
+            <span className="text-2xl sm:text-3xl font-black text-[#FF78B9] select-none leading-none">
+              )
+            </span>
           </div>
 
           {/* Equals Question Mark */}
-          <span className="text-3xl font-black text-[#40B9FF] px-1 select-none">= ?</span>
+          <div className="inline-flex items-center px-1 shrink-0">
+            <span className="text-2xl sm:text-3xl font-black text-[#40B9FF] select-none">
+              = ?
+            </span>
+          </div>
         </div>
-        <p className="mt-2 text-xs md:text-sm text-white/70 font-semibold">
+
+        <p className="mt-2 text-xs sm:text-sm text-white/70 font-semibold text-center">
           {isSubtraction ? "Hitung hasil pengurangannya!" : "Hitung semua gambar bersama-sama!"}
         </p>
       </div>

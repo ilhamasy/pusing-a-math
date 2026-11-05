@@ -18,7 +18,7 @@ export function QuestionCard({ question, isShaking }: QuestionCardProps) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.94 }}
       transition={{ duration: 0.35, ease: "easeOut" }}
-      className={`w-full max-w-md mx-auto p-5 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl relative overflow-hidden text-center ${
+      className={`w-full max-w-md mx-auto p-3.5 sm:p-5 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl relative overflow-hidden text-center ${
         isShaking ? "animate-gentle-shake border-[#FF78B9]" : ""
       }`}
     >
